@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Applications/ti/ccs2051/C2000Ware_26_00_00_00/**)",
+      "Read(//Applications/ti/c2000/C2000Ware_6_00_01_00/**)",
+      "Read(//Applications/ti/ccs2051/ccs/utils/sysconfig_1.27.1/**)",
+      "Read(//Users/vaibhavchavan/ti/C2000Ware_26_01_00_00/**)"
+    ]
+  }
+}

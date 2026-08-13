@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Board Self-Test - Live Dashboard</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Board Self-Test - Live Dashboard</h1>
+  <div id="meta">Waiting for first update...</div>
+  <div style="font-size:13px;margin-bottom:8px;">
+    Have the board plugged in right now? <a href="connect.html">Connect it directly →</a>
+    (Chrome/Edge only)
+  </div>
+
+  <div class="grid">
+    <div class="panel">
+      <h2>Temperature Test</h2>
+      <table id="temp-table"><tbody></tbody></table>
+    </div>
+    <div class="panel">
+      <h2>Param Test</h2>
+      <table id="param-table"><tbody></tbody></table>
+    </div>
+    <div class="panel">
+      <h2>I/O Test</h2>
+      <div id="buttons"></div>
+      <hr class="separator" />
+      <table id="io-table"><tbody></tbody></table>
+    </div>
+    <div class="panel">
+      <h2>Fan</h2>
+      <div class="empty">Fan control is local-only (via app.py on the PC) - not shown on this web dashboard yet.</div>
+    </div>
+  </div>
+
+  <div id="banner">No data yet</div>
+
+<script src="render.js"></script>
+<script>
+// 10s, not 1s - keeps everyone comfortably inside the free database tier's
+// monthly command quota even with several people watching at once. See
+// README.md "Is this free?" for the math.
+const POLL_MS = 10000;
+
+async function poll() {
+  try {
+    const resp = await fetch('/api/latest', { cache: 'no-store' });
+    renderSnapshot(await resp.json());
+  } catch (err) {
+    document.getElementById('meta').textContent = 'Error fetching dashboard data: ' + err;
+  } finally {
+    setTimeout(poll, POLL_MS);
+  }
+}
+
+poll();
+</script>
+</body>
+</html>

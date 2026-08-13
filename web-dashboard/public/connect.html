@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Board Self-Test - Connect Board</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Board Self-Test - Connect Board</h1>
+  <div style="font-size:13px;margin-bottom:8px;">
+    <a href="index.html">← Just want to view results? Go to the dashboard</a>
+  </div>
+
+  <div id="unsupported-warning" class="warning-box" style="display:none;">
+    This browser doesn't support direct USB connection (Web Serial API).
+    Use <strong>Chrome</strong> or <strong>Edge</strong> on this page - Safari
+    and Firefox can't do this part. (The regular dashboard link above still
+    works in any browser, it just won't have live data unless someone else's
+    Chrome/Edge tab is connected here, or <code>relay.py</code> is running.)
+  </div>
+
+  <div class="connect-bar">
+    <button id="connect-btn">Connect Board (USB)</button>
+    <button id="disconnect-btn" disabled>Disconnect</button>
+    <span>Push token:</span>
+    <input type="password" id="token" placeholder="RELAY_TOKEN" />
+    <span id="conn-status">Not connected</span>
+  </div>
+  <div style="font-size:12px;color:#777;margin-bottom:12px;">
+    The token must match the <code>RELAY_TOKEN</code> you set in the Vercel project's
+    environment variables (see web-dashboard/README.md) - it's what lets this page publish
+    results so other people's dashboard links update too. Without it, results still show
+    live right here, they just won't reach anyone else.
+  </div>
+
+  <div id="meta">Not connected yet</div>
+
+  <div class="grid">
+    <div class="panel">
+      <h2>Temperature Test</h2>
+      <table id="temp-table"><tbody></tbody></table>
+    </div>
+    <div class="panel">
+      <h2>Param Test</h2>
+      <table id="param-table"><tbody></tbody></table>
+    </div>
+    <div class="panel">
+      <h2>I/O Test</h2>
+      <div id="buttons"></div>
+      <hr class="separator" />
+      <table id="io-table"><tbody></tbody></table>
+    </div>
+    <div class="panel">
+      <h2>Fan</h2>
+      <div class="empty">Fan control isn't available from this page yet - use app.py locally for that.</div>
+    </div>
+  </div>
+
+  <div id="banner">No data yet</div>
+
+<script src="protocol.js"></script>
+<script src="render.js"></script>
+<script>
+const TOKEN_KEY = 'relay_token';
+const EVENT_TIMEOUT_MS = 10000;
+// 3s between test runs - only this one tab writes, so it's not multiplied by
+// viewer count the way index.html's poll interval is, but no need to hammer
+// the free database quota faster than a self-test dashboard needs anyway.
+const CYCLE_INTERVAL_MS = 3000;
+
+const connectBtn = document.getElementById('connect-btn');
+const disconnectBtn = document.getElementById('disconnect-btn');
+const tokenInput = document.getElementById('token');
+const statusEl = document.getElementById('conn-status');
+
+tokenInput.value = localStorage.getItem(TOKEN_KEY) || '';
+tokenInput.addEventListener('change', () => localStorage.setItem(TOKEN_KEY, tokenInput.value));
+
+if (!('serial' in navigator)) {
+  document.getElementById('unsupported-warning').style.display = 'block';
+  connectBtn.disabled = true;
+}
+
+let port = null;
+let portWriter = null;
+let reader = null;
+let readableStreamClosed = null;
+let keepReading = false;
+let currentRows = {};
+let buttonConfirmed = new Set();
+let overall = null;
+let pendingOverallResolve = null;
+
+function setStatus(text) {
+  statusEl.textContent = text;
+}
+
+function buildSnapshotObj() {
+  return { overall, timestamp: Date.now() / 1000, rows: Object.values(currentRows) };
+}
+
+function handleLine(line) {
+  const event = parseLine(line);
+  if (!event) return;
+
+  if (event.type === 'ready') {
+    setStatus('Board ready');
+  } else if (event.type === 'test_result') {
+    const name = event.name;
+    if (BUTTON_NAMES.includes(name) && event.value === '0') buttonConfirmed.add(name);
+
+    const row = {
+      name,
+      display_name: displayName(name),
+      test_type: event.test_type,
+      result: event.result,
+      raw_value: event.value,
+      value: formatValue(name, event.test_type, event.value),
+      panel: panelFor(name),
+    };
+    if (BUTTON_NAMES.includes(name)) row.confirmed = buttonConfirmed.has(name);
+    currentRows[name] = row;
+
+    if (name === 'VBus_AD') {
+      const dc = dcBusRow(event.value);
+      if (dc) {
+        currentRows['DC_BUS'] = {
+          name: 'DC_BUS', display_name: 'DC_BUS', test_type: 'STATUS', result: 'INFO',
+          raw_value: String(dc.present), value: `${dc.present} (${dc.volts.toFixed(1)}V)`, panel: 'param',
+        };
+      }
+    }
+    renderSnapshot(buildSnapshotObj());
+  } else if (event.type === 'overall_result') {
+    overall = event.result;
+    renderSnapshot(buildSnapshotObj());
+    if (pendingOverallResolve) {
+      const resolve = pendingOverallResolve;
+      pendingOverallResolve = null;
+      resolve(overall);
+    }
+  }
+}
+
+async function readLoop() {
+  const textDecoder = new TextDecoderStream();
+  // Stored (not fire-and-forgotten) so disconnect() can wait for this pipe to
+  // actually unlock port.readable before calling port.close() - closing too
+  // early throws (silently, before this fix) and leaves the OS-level port
+  // handle open, which is why Disconnect looked like it worked but the port
+  // stayed "busy" for any other program trying to open it afterwards.
+  readableStreamClosed = port.readable.pipeTo(textDecoder.writable).catch(() => {});
+  reader = textDecoder.readable.getReader();
+  let buf = '';
+  try {
+    while (keepReading) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += value;
+      let idx;
+      while ((idx = buf.indexOf('\n')) >= 0) {
+        handleLine(buf.slice(0, idx));
+        buf = buf.slice(idx + 1);
+      }
+    }
+  } catch (err) {
+    setStatus('Read error: ' + err.message);
+  }
+}
+
+async function sendLine(text) {
+  await portWriter.write(new TextEncoder().encode(text + '\n'));
+}
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function pushSnapshot(snap) {
+  const token = tokenInput.value;
+  if (!token) return; // no token set - still rendered locally above, just not published
+  try {
+    const resp = await fetch('/api/update', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'X-Relay-Token': token },
+      body: JSON.stringify(snap),
+    });
+    if (!resp.ok) setStatus(`Connected (publish failed: ${resp.status})`);
+  } catch (err) {
+    setStatus('Connected (publish failed: ' + err.message + ')');
+  }
+}
+
+async function testLoop() {
+  while (keepReading) {
+    const overallPromise = new Promise(resolve => { pendingOverallResolve = resolve; });
+    try {
+      await sendLine('START');
+    } catch (err) {
+      setStatus('Write error: ' + err.message);
+      break;
+    }
+    const timeoutPromise = sleep(EVENT_TIMEOUT_MS).then(() => 'timeout');
+    const result = await Promise.race([overallPromise, timeoutPromise]);
+
+    if (result === 'timeout') {
+      setStatus('Connected (timed out waiting for board this cycle)');
+      pendingOverallResolve = null;
+    } else {
+      setStatus(`Connected (last run: ${result})`);
+      await pushSnapshot(buildSnapshotObj());
+    }
+    if (!keepReading) break;
+    await sleep(CYCLE_INTERVAL_MS);
+  }
+}
+
+async function connect() {
+  try {
+    port = await navigator.serial.requestPort();
+    await port.open({ baudRate: 115200 });
+  } catch (err) {
+    setStatus('Connect failed: ' + err.message);
+    return;
+  }
+
+  currentRows = {};
+  buttonConfirmed.clear();
+  overall = null;
+  keepReading = true;
+  portWriter = port.writable.getWriter();
+
+  connectBtn.disabled = true;
+  disconnectBtn.disabled = false;
+  setStatus('Connected');
+  document.getElementById('meta').textContent = 'Connected - running first test...';
+
+  readLoop();
+  testLoop();
+}
+
+async function disconnect() {
+  keepReading = false;
+  // Order matters: cancel the reader, then wait for the pipeTo it was
+  // feeding from to actually settle, THEN close the writer, THEN close the
+  // port. Closing the port while readable/writable are still locked throws
+  // and leaves the real OS-level port open (see readLoop's comment) - this
+  // is what caused "Disconnect" to look like it worked while other programs
+  // (or a fresh Connect) still got "port busy".
+  try { if (reader) await reader.cancel(); } catch (e) {}
+  if (readableStreamClosed) { try { await readableStreamClosed; } catch (e) {} }
+  try { if (portWriter) await portWriter.close(); } catch (e) {
+    try { portWriter.releaseLock(); } catch (e2) {}
+  }
+  try { if (port) await port.close(); } catch (e) {}
+  port = null;
+  reader = null;
+  portWriter = null;
+  readableStreamClosed = null;
+  connectBtn.disabled = false;
+  disconnectBtn.disabled = true;
+  setStatus('Not connected');
+}
+
+connectBtn.addEventListener('click', connect);
+disconnectBtn.addEventListener('click', disconnect);
+</script>
+</body>
+</html>

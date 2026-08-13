@@ -1,0 +1,9 @@
+{
+  "name": "self-test-dashboard",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Web display for the board self-test results, fed by gui-app/relay.py running on the PC connected to the board.",
+  "dependencies": {
+    "@vercel/kv": "^1.0.1"
+  }
+}

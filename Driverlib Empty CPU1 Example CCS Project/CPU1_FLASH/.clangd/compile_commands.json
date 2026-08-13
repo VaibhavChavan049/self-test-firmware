@@ -1,0 +1,67 @@
+[
+   {
+      "directory" : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH",
+      "command"   : "clang++ -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00\" -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/device\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00/driverlib/f28p65x/driverlib/\" -I\"/Applications/ti/ccs2100/ccs/tools/compiler/ti-cgt-c2000_25.11.1.LTS/include\" -D_FLASH -DDEBUG -DCPU1 -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH/syscfg\" -DF28P65x=1 -xc",
+      "file"      : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/adc_test.c"
+   },
+   {
+      "directory" : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH",
+      "command"   : "clang++ -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00\" -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/device\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00/driverlib/f28p65x/driverlib/\" -I\"/Applications/ti/ccs2100/ccs/tools/compiler/ti-cgt-c2000_25.11.1.LTS/include\" -D_FLASH -DDEBUG -DCPU1 -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH/syscfg\" -DF28P65x=1 -xc",
+      "file"      : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/device/device.c"
+   },
+   {
+      "directory" : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH",
+      "command"   : "clang++ -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00\" -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/device\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00/driverlib/f28p65x/driverlib/\" -I\"/Applications/ti/ccs2100/ccs/tools/compiler/ti-cgt-c2000_25.11.1.LTS/include\" -D_FLASH -DDEBUG -DCPU1 -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH/syscfg\" -DF28P65x=1",
+      "file"      : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/device/f28p65x_codestartbranch.asm"
+   },
+   {
+      "directory" : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH",
+      "command"   : "clang++ -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00\" -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/device\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00/driverlib/f28p65x/driverlib/\" -I\"/Applications/ti/ccs2100/ccs/tools/compiler/ti-cgt-c2000_25.11.1.LTS/include\" -D_FLASH -DDEBUG -DCPU1 -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH/syscfg\" -DF28P65x=1 -xc",
+      "file"      : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/gpio_test.c"
+   },
+   {
+      "directory" : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH",
+      "command"   : "clang++ -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00\" -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/device\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00/driverlib/f28p65x/driverlib/\" -I\"/Applications/ti/ccs2100/ccs/tools/compiler/ti-cgt-c2000_25.11.1.LTS/include\" -D_FLASH -DDEBUG -DCPU1 -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH/syscfg\" -DF28P65x=1 -xc",
+      "file"      : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/led_test.c"
+   },
+   {
+      "directory" : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH",
+      "command"   : "clang++ -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00\" -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/device\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00/driverlib/f28p65x/driverlib/\" -I\"/Applications/ti/ccs2100/ccs/tools/compiler/ti-cgt-c2000_25.11.1.LTS/include\" -D_FLASH -DDEBUG -DCPU1 -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH/syscfg\" -DF28P65x=1 -xc",
+      "file"      : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/main.c"
+   },
+   {
+      "directory" : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH",
+      "command"   : "clang++ -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00\" -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/device\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00/driverlib/f28p65x/driverlib/\" -I\"/Applications/ti/ccs2100/ccs/tools/compiler/ti-cgt-c2000_25.11.1.LTS/include\" -D_FLASH -DDEBUG -DCPU1 -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH/syscfg\" -DF28P65x=1 -xc",
+      "file"      : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/self_test.c"
+   },
+   {
+      "directory" : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH",
+      "command"   : "clang++ -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00\" -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/device\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00/driverlib/f28p65x/driverlib/\" -I\"/Applications/ti/ccs2100/ccs/tools/compiler/ti-cgt-c2000_25.11.1.LTS/include\" -D_FLASH -DDEBUG -DCPU1 -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH/syscfg\" -DF28P65x=1 -xc",
+      "file"      : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/uart_comm.c"
+   },
+   {
+      "directory" : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH",
+      "command"   : "clang++ -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00\" -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/device\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00/driverlib/f28p65x/driverlib/\" -I\"/Applications/ti/ccs2100/ccs/tools/compiler/ti-cgt-c2000_25.11.1.LTS/include\" -D_FLASH -DDEBUG -DCPU1 -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH/syscfg\" -DF28P65x=1 -xc",
+      "file"      : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/fan_control.c"
+   },
+   {
+      "directory" : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH",
+      "command"   : "clang++ -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00\" -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/device\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00/driverlib/f28p65x/driverlib/\" -I\"/Applications/ti/ccs2100/ccs/tools/compiler/ti-cgt-c2000_25.11.1.LTS/include\" -D_FLASH -DDEBUG -DCPU1 -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH/syscfg\" -DF28P65x=1 -xc",
+      "file"      : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/coil_control.c"
+   },
+   {
+      "directory" : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH",
+      "command"   : "clang++ -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00\" -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/device\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00/driverlib/f28p65x/driverlib/\" -I\"/Applications/ti/ccs2100/ccs/tools/compiler/ti-cgt-c2000_25.11.1.LTS/include\" -D_FLASH -DDEBUG -DCPU1 -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH/syscfg\" -DF28P65x=1 -xc",
+      "file"      : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/current_protect.c"
+   },
+   {
+      "directory" : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH",
+      "command"   : "clang++ -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00\" -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/device\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00/driverlib/f28p65x/driverlib/\" -I\"/Applications/ti/ccs2100/ccs/tools/compiler/ti-cgt-c2000_25.11.1.LTS/include\" -D_FLASH -DDEBUG -DCPU1 -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH/syscfg\" -DF28P65x=1 -xc",
+      "file"      : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH/syscfg/board.c"
+   },
+   {
+      "directory" : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH",
+      "command"   : "clang++ -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00\" -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/device\" -I\"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00/driverlib/f28p65x/driverlib/\" -I\"/Applications/ti/ccs2100/ccs/tools/compiler/ti-cgt-c2000_25.11.1.LTS/include\" -D_FLASH -DDEBUG -DCPU1 -I\"/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH/syscfg\" -DF28P65x=1 -xc",
+      "file"      : "/Users/vaibhavchavan/Documents/self-test firmware/Driverlib Empty CPU1 Example CCS Project/CPU1_FLASH/syscfg/c2000ware_libraries.c"
+   }
+]

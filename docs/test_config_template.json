@@ -1,0 +1,54 @@
+{
+  "_comment": "Reference list of test parameters, sourced from the Tucena schematic (sheet /MCU/, U1A = F28P650DK6PZP). Mirrors firmware/src/test_config.h - keep both in sync. The GUI itself doesn't parse this file to run tests (it just displays whatever the firmware reports over UART, see docs/protocol.md) - this exists so the parameter list is documented somewhere human-readable outside the C source.",
+  "board": "F28P650DK6PZP",
+  "uart": {
+    "baud": 115200,
+    "data_bits": 8,
+    "parity": "N",
+    "stop_bits": 1,
+    "notes": "DBG_UART_TX (GPIO70) / DBG_UART_RX (GPIO71) per schematic, on the UARTB peripheral (not SCI-B, not HMI_UART_TX/RX GPIO12/13 which is SCIA/uartHMI - confirmed via board pinmux sheet)."
+  },
+  "excluded_by_design": {
+    "_comment": "Signals on the schematic deliberately not tested yet, and why",
+    "not_plain_gpio": ["FAN_PWM", "CAN_TX", "CAN_RX", "PWM_Top", "PWM_Bot"],
+    "used_by_this_protocol": ["DBG_UART_TX", "DBG_UART_RX"],
+    "other_peripherals": ["HMI_UART_TX", "HMI_UART_RX", "AD_DACA_OUT", "B0_VDAC", "B1_DACC_OUT", "MRAM_CS", "MRAM_CLK", "MRAM_MISO", "MRAM_MOSI"],
+    "not_stuffed_on_board": ["TP1", "TP2", "TP3", "TP4", "TP5"],
+    "not_connected": ["A3", "A4", "A5", "A8_GPIO209", "A10_GPIO213", "A11_GPIO214"],
+    "floating_no_net_this_rev": {
+      "_comment": "Board's own pin function list says these 'do not go anywhere' / 'go nowhere' - excluded rather than tested, since reading a floating pin is noise, not a real PASS/FAIL",
+      "pins": ["FAULT (GPIO86)", "Vsens_AD (B3)"]
+    }
+  },
+  "tests": [
+    { "name": "ButtonON",       "type": "GPIO", "pin": "GPIO2",  "direction": "INPUT",  "expected_value": 1, "notes": "assumes active-low w/ pull-up (idle = not pressed) - TODO confirm polarity" },
+    { "name": "ButtonLOW",      "type": "GPIO", "pin": "GPIO3",  "direction": "INPUT",  "expected_value": 1, "notes": "same polarity assumption as ButtonON" },
+    { "name": "ButtonMEDIUM",   "type": "GPIO", "pin": "GPIO89", "direction": "INPUT",  "expected_value": 1, "notes": "same polarity assumption as ButtonON" },
+    { "name": "ButtonHIGH",     "type": "GPIO", "pin": "GPIO90", "direction": "INPUT",  "expected_value": 1, "notes": "same polarity assumption as ButtonON" },
+    { "name": "ButtonSILENT",   "type": "GPIO", "pin": "GPIO91", "direction": "INPUT",  "expected_value": 1, "notes": "same polarity assumption as ButtonON" },
+
+    { "name": "Temp2_FLT",      "type": "GPIO", "pin": "GPIO1",  "direction": "INPUT",  "expected_value": 0, "notes": "measured 0 on a fresh, room-temperature board (no real fault possible) - taken as the true no-fault state" },
+    { "name": "I_OC_Flt",       "type": "GPIO", "pin": "GPIO11", "direction": "INPUT",  "expected_value": 1, "notes": "measured 1 on the real board - active-low assumption held for this one" },
+    { "name": "Temp_HS_FLT",    "type": "GPIO", "pin": "GPIO87", "direction": "INPUT",  "expected_value": 0, "notes": "same reasoning as Temp2_FLT" },
+    { "name": "Temp1_FLT",      "type": "GPIO", "pin": "GPIO92", "direction": "INPUT",  "expected_value": 0, "notes": "same reasoning as Temp2_FLT" },
+    { "name": "VREG_PG",        "type": "GPIO", "pin": "GPIO64", "direction": "INPUT",  "expected_value": 1, "notes": "power-good, active-high assumed - TODO confirm" },
+    { "name": "BOOT1_STRAP",    "type": "GPIO", "pin": "GPIO84", "direction": "INPUT",  "expected_value": 1, "notes": "boot-mode strap pin - read-only, never drive this pin" },
+
+    { "name": "GATEDRV_ENABLE", "type": "GPIO", "pin": "GPIO30", "direction": "OUTPUT", "expected_value": 1, "notes": "" },
+    { "name": "HMI_BOOT1_CTRL", "type": "GPIO", "pin": "GPIO72", "direction": "OUTPUT", "expected_value": 1, "notes": "" },
+    { "name": "GPIO_BUZZ",      "type": "GPIO", "pin": "GPIO85", "direction": "OUTPUT", "expected_value": 1, "notes": "buzzer will audibly sound during this test" },
+
+    { "name": "BUTTON_LED_ON",  "type": "LED",  "pin": "GPIO35", "expected_value": 1, "notes": "no physical (visual) verification yet - see docs/protocol.md future switch-box section" },
+    { "name": "LED_YELLOW",     "type": "LED",  "pin": "GPIO61", "expected_value": 1, "notes": "same as BUTTON_LED_ON" },
+
+    { "name": "Isens_AD",       "type": "ADC", "pin": "A1 (ADC-A ch1)", "expected_min": 0, "expected_max": 4095, "notes": "full-range placeholder - TODO narrow once sensor scaling is known" },
+    { "name": "Temp1_AD",       "type": "ADC", "pin": "A2 (ADC-A ch2)", "expected_min": 0, "expected_max": 4095, "notes": "same as Isens_AD" },
+    { "name": "Isens_Ref_AD",   "type": "ADC", "pin": "B2 (ADC-B ch2)", "expected_min": 0, "expected_max": 4095, "notes": "same as Isens_AD" },
+    { "name": "Temp2_AD",       "type": "ADC", "pin": "C0 (ADC-C ch0)", "expected_min": 0, "expected_max": 4095, "notes": "same as Isens_AD" },
+    { "name": "Temp_HS_AD",     "type": "ADC", "pin": "C1 (ADC-C ch1)", "expected_min": 0, "expected_max": 4095, "notes": "same as Isens_AD" },
+    { "name": "VBus_AD",        "type": "ADC", "pin": "C2 (ADC-A ch3)", "expected_min": 0, "expected_max": 4095, "notes": "same as Isens_AD" }
+    
+  ]
+}
+
+

@@ -1,0 +1,17 @@
+"./adc_test.obj"
+"./syscfg/board.obj"
+"./syscfg/c2000ware_libraries.obj"
+"./coil_control.obj"
+"./current_protect.obj"
+"./fan_control.obj"
+"./gpio_test.obj"
+"./led_test.obj"
+"./main.obj"
+"./self_test.obj"
+"./uart_comm.obj"
+"./device/device.obj"
+"./device/f28p65x_codestartbranch.obj"
+"../28p65x_generic_flash_lnk_cpu1.cmd"
+"/Users/vaibhavchavan/ti/C2000Ware_26_01_00_00/driverlib/f28p65x/driverlib/ccs/Debug/driverlib.lib"
+-lc2000ware_libraries.cmd.genlibs
+-llibc.a

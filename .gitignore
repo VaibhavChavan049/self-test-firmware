@@ -1,0 +1,20 @@
+# Python
+gui-app/venv/
+gui-app/.venv/
+gui-app/__pycache__/
+gui-app/logs/
+*.pyc
+
+# macOS
+.DS_Store
+
+# CCS build artifacts (generated when you build the copied-in project locally)
+firmware/Debug/
+firmware/Release/
+*.out
+*.obj
+*.d
+
+# Downloaded TI-Rex reference examples (scratch space, not part of the firmware)
+firmware/reference/*
+!firmware/reference/README.md

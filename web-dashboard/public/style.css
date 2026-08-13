@@ -1,0 +1,98 @@
+:root {
+  --pass: #1a8a1a;
+  --fail: #d32f2f;
+  --info: #555555;
+  --border: #ccc;
+  --bg-panel: #fafafa;
+}
+* { box-sizing: border-box; }
+body {
+  font-family: -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  margin: 0;
+  padding: 16px;
+  background: #f0f0f0;
+  color: #111;
+}
+h1 { font-size: 18px; margin: 0 0 4px; }
+#meta { font-size: 13px; color: #666; margin-bottom: 12px; }
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media (max-width: 700px) {
+  .grid { grid-template-columns: 1fr; }
+}
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  min-height: 160px;
+}
+.panel h2 {
+  font-size: 14px;
+  margin: 0 0 8px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 4px;
+}
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+td, th { text-align: left; padding: 3px 4px; }
+th { color: #666; font-weight: 600; border-bottom: 1px solid #ddd; }
+.PASS { color: var(--pass); font-weight: 600; }
+.FAIL { color: var(--fail); font-weight: 600; }
+.INFO { color: var(--info); }
+.btn-row { display: flex; align-items: center; gap: 6px; padding: 2px 0; font-size: 13px; }
+.btn-row .box { width: 16px; display: inline-block; }
+.separator { border: none; border-top: 1px solid var(--border); margin: 8px 0; }
+#banner {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 700;
+  padding: 12px;
+  border-radius: 6px;
+  background: #ccc;
+  color: #333;
+}
+#banner.PASS { background: #4caf50; color: white; }
+#banner.FAIL { background: #e53935; color: white; }
+.empty { color: #999; font-size: 13px; font-style: italic; }
+
+/* connect.html-specific */
+.connect-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+}
+.connect-bar input[type="password"] {
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  width: 220px;
+}
+.connect-bar button {
+  padding: 6px 14px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 13px;
+}
+.connect-bar button:hover { background: #f5f5f5; }
+.connect-bar button:disabled { opacity: 0.5; cursor: not-allowed; }
+#conn-status { font-size: 13px; font-weight: 600; }
+.warning-box {
+  background: #fff3cd;
+  border: 1px solid #ffe08a;
+  border-radius: 6px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  font-size: 13px;
+}
