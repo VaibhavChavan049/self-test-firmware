@@ -1,8 +1,8 @@
-# Board Self-Test — Project Overview
+# Board Self-Test Project Overview
 
 ## Problem
 
-Boards come from the contract manufacturer (CM) with components stuffed only —
+Boards come from the contract manufacturer (CM) with components stuffed only 
 no functional testing on their side. Today, verification is done manually,
 circuit-level, with no processor involvement. Slow and labor-intensive.
 
@@ -10,14 +10,14 @@ circuit-level, with no processor involvement. Slow and labor-intensive.
 
 An automated self-test system with two halves:
 
-1. **Firmware** (runs on the board's own processor, `F28P650DK6PZP`) — exercises
+1. **Firmware** (runs on the board's own processor, `F28P650DK6PZP`)  exercises
    GPIOs, ADC channels, LEDs (and future parameters), and reports PASS/FAIL per
    parameter over UART.
-2. **PC GUI** (Python) — employee plugs in the board, hits "Start Test", watches
+2. **PC GUI** (Python) employee plugs in the board, hits "Start Test", watches
    results come in live, gets one overall GREEN (all pass) / RED (something
    failed) verdict, and every run is logged.
 
-This is a brand-new, independent flow — it does not touch or replace the
+This is a brand-new, independent flow it does not touch or replace the
 existing manual circuit-level test process.
 
 ## Production flow
@@ -43,7 +43,7 @@ existing manual circuit-level test process.
 - **Fixed values for now, switch-box-ready later.** Right now every test
   checks against a fixed default expected value/range (no physical stimulus).
   The protocol and architecture leave room for a future physical switch box
-  that the software can command (e.g., "assert this input now") — see
+  that the software can command (e.g., "assert this input now") see
   `docs/protocol.md` for how that slots in without a redesign.
 - **Two independent, loosely-coupled halves.** Firmware only needs to speak
   the line protocol in `docs/protocol.md`; the GUI only needs to parse it.
@@ -52,12 +52,12 @@ existing manual circuit-level test process.
 
 ## Folder map
 
-- [`firmware/`](../firmware/) — TI Code Composer Studio (CCS) project source
+- [`firmware/`](../firmware/) TI Code Composer Studio (CCS) project source
   for the `F28P650DK6PZP`. See `firmware/README.md` for CCS setup and TI-Rex
   reference examples.
-- [`gui-app/`](../gui-app/) — Python (Tkinter) GUI skeleton. See
+- [`gui-app/`](../gui-app/) Python (Tkinter) GUI skeleton. See
   `gui-app/README.md` to run it.
-- [`docs/`](.) — this overview, the UART protocol contract
+- [`docs/`](.) this overview, the UART protocol contract
   (`protocol.md`), and the test-parameter config template
   (`test_config_template.json`).
 
@@ -65,5 +65,5 @@ existing manual circuit-level test process.
 
 Skeleton stage. Pin numbers, ADC channel assignments, and exact expected
 values/ranges are placeholders until the schematic / final parameter list is
-available — search for `TODO` across `firmware/src/test_config.h` and
+available search for `TODO` across `firmware/src/test_config.h` and
 `docs/test_config_template.json`.
