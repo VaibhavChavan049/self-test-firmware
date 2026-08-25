@@ -46,7 +46,7 @@
     { "name": "Isens_Ref_AD",   "type": "ADC", "pin": "B2 (ADC-B ch2)", "expected_min": 0, "expected_max": 4095, "notes": "same as Isens_AD" },
     { "name": "Temp2_AD",       "type": "ADC", "pin": "C0 (ADC-C ch0)", "expected_min": 0, "expected_max": 4095, "notes": "same as Isens_AD" },
     { "name": "Temp_HS_AD",     "type": "ADC", "pin": "C1 (ADC-C ch1)", "expected_min": 0, "expected_max": 4095, "notes": "same as Isens_AD" },
-    { "name": "VBus_AD",        "type": "ADC", "pin": "C2 (ADC-A ch3)", "expected_min": 0, "expected_max": 4095, "notes": "same as Isens_AD" }
+    { "name": "VBus_AD",        "type": "ADC", "pin": "B3 (ADC-C ch3)", "expected_min": 0, "expected_max": 4095, "notes": "same as Isens_AD" }
     
   ]
 }

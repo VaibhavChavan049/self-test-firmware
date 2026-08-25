@@ -3,11 +3,11 @@
  *
  * Over-current trip protection for the current-sensor signal (Isens_AD,
  * analog pin A1) using the CMPSS1 hardware comparator - ported from
- * Alexi's CMPSS/DAC setup (Code/DSP/main.cpp), which coil_control.c's
- * COIL_STATE_HEATING relies on but did not itself implement (see the
- * "SAFETY: NOT INCLUDED" note in coil_control.h - this file fills that
- * gap, partially - see the note in current_protect.c about what is
- * still missing).
+ * Alexi's CMPSS/DAC setup (Code/DSP/main.cpp). CurrentProtect_IsTripped()
+ * is polled every 1ms by coil_control.c's CPU Timer0 ISR while heating,
+ * which forces a stop on trip - see the note in current_protect.c about
+ * what this software poll does and doesn't cover vs. a real hardware
+ * trip-zone path.
  */
 
 #ifndef CURRENT_PROTECT_H

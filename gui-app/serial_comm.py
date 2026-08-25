@@ -67,6 +67,12 @@ def parse_line(line):
         except ValueError:
             return None
 
+    if tag == "RELAY_ACK" and len(parts) == 2:
+        try:
+            return {"type": "relay_ack", "state": int(parts[1])}
+        except ValueError:
+            return None
+
     # Unrecognized line - caller decides whether to log it raw.
     return {"type": "raw", "line": line}
 
@@ -116,6 +122,12 @@ class SerialTestClient:
         """percent: 0-100, 0 = fan off. Independent of start_test()."""
         self.send(f"FAN_SET,{int(percent)}")
 
+    def set_relay(self, closed):
+        """closed: True to close the relay (DC+_P1 to DC+_P2), False to open it.
+        Independent of start_test() - see docs/protocol.md RELAY_SET note about
+        a full test run overriding this."""
+        self.send(f"RELAY_SET,{1 if closed else 0}")
+
     def _read_loop(self):
         while not self._stop_flag.is_set():
             try:
@@ -164,6 +176,9 @@ class MockTestClient(SerialTestClient):
         elif command.startswith("FAN_SET,"):
             percent = int(command.split(",")[1])
             self.events.put({"type": "fan_ack", "percent": percent})
+        elif command.startswith("RELAY_SET,"):
+            state = int(command.split(",")[1])
+            self.events.put({"type": "relay_ack", "state": state})
 
     def _run_mock_sequence(self):
         self.events.put({"type": "begin", "count": len(self._MOCK_TESTS)})

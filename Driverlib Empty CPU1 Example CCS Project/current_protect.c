@@ -26,14 +26,20 @@
  * adjusting to match, otherwise the calibration timing (and therefore
  * result) may not be equivalent.
  *
- * *** STILL NOT INCLUDED - READ BEFORE USING WITH REAL POWER ***
- * Hardware hasn't been wired so a trip AUTOMATICALLY forces the PWM
- * outputs off - team confirmed even Alexi's own code has this disabled
- * (EPWM_TZ_ACTION_DISABLE, the LOW action is commented out in his
- * source). CurrentProtect_IsTripped() is a real hardware latch you can
- * poll, but nothing polls it automatically yet. Do not connect this to
- * real coil/power hardware without that wired (CMPSS -> EPWM5 Trip Zone
- * via X-BAR/Digital Compare) and verified on a scope.
+ * CurrentProtect_IsTripped() IS now polled automatically: coil_control.c's
+ * CPU Timer0 ISR (1ms tick) checks it while COIL_STATE_HEATING and forces
+ * COIL_STATE_ERROR (PWM outputs forced low, contactor opened) on trip -
+ * this is a software poll-and-react loop, not a hardware trip-zone
+ * connection. Alexi's own source arms this same comparator but never
+ * acts on it in software either (EPWM_TZ_ACTION_DISABLE, the LOW action
+ * is commented out in his source) - the software poll here is this
+ * project's own addition on top of his code, not a difference from it.
+ * A true hardware trip-zone path (CMPSS -> EPWM5 Trip Zone via
+ * X-BAR/Digital Compare, which reacts within one PWM cycle instead of
+ * within one 1ms tick) is still not wired - do not treat the current 1ms
+ * software poll as equivalent to that for a real power test without
+ * verifying the trip response time on a scope is fast enough for your
+ * fault case.
  */
 
 #include "driverlib.h"

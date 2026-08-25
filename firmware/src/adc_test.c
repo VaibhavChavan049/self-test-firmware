@@ -101,11 +101,18 @@ void ADCTest_Init(void)
      * tracked real heat correctly while Temp2_AD/Temp_HS_AD read a
      * plausible-looking but disconnected-from-reality number that never
      * moved with it (confirmed via driverlib/f28p65x/driverlib/gpio.h -
-     * GPIO_setAnalogMode(), "this setting should be thought of as another
-     * level of muxing").
+     * GPIO_setAnalogMode(), this setting should be thought of as another
+     * level of muxing).
+     *
+     * NOTE on the extra call below for pin 20: this was tried based on a
+     * pinmux.csv row that turned out to be a false match (that CSV's "Pin"
+     * column is a BGA grid coordinate, unrelated to the schematic's "C2"
+     * meaning "ADC module C, channel 2") - it doesn't do anything for
+     * VBus_AD (wrong physical pin), left in harmlessly at your request.
      */
     GPIO_setAnalogMode(199U, GPIO_ANALOG_ENABLED); /* Temp2_AD   (ADC-C ch0) */
     GPIO_setAnalogMode(200U, GPIO_ANALOG_ENABLED); /* Temp_HS_AD (ADC-C ch1) */
+    GPIO_setAnalogMode(20U, GPIO_ANALOG_ENABLED);  /* pin 20 - see note above */
 
     for (i = 0; i < (sizeof(g_adcModuleRegs) / sizeof(g_adcModuleRegs[0])); i++)
     {
@@ -115,7 +122,7 @@ void ADCTest_Init(void)
         ADC_setMode(base, ADC_RESOLUTION_12BIT, ADC_MODE_SINGLE_ENDED);
         ADC_setInterruptPulseMode(base, ADC_PULSE_END_OF_CONV);
         ADC_enableConverter(base);
-
+        
         /*
          * Without this, ADC_TEST_SOC_NUM's completion never sets the
          * ADCINT1 flag, so ADCTest_Run()'s wait loop

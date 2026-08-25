@@ -104,6 +104,7 @@ class SelfTestApp(tk.Tk):
 
         param_frame = ttk.LabelFrame(grid, text="Param Test", padding=8)
         param_frame.grid(row=0, column=1, sticky="nsew", padx=5, pady=5)
+        self._build_relay_row(param_frame)
         self.param_tree = self._make_result_tree(param_frame, ("param", "value", "result"),
                                                    (("param", "Parameter", 100), ("value", "Value", 130),
                                                     ("result", "Result", 70)))
@@ -116,6 +117,10 @@ class SelfTestApp(tk.Tk):
         fan_frame.grid(row=1, column=1, sticky="nsew", padx=5, pady=5)
         self._build_fan_panel(fan_frame)
 
+        debug_frame = ttk.LabelFrame(self, text="Debug Console", padding=8)
+        debug_frame.pack(fill="x", padx=10, pady=(0, 5))
+        self._build_debug_console(debug_frame)
+
         # Overall status banner
         self.status_var = tk.StringVar(value="Not connected")
         self.status_label = tk.Label(
@@ -123,6 +128,49 @@ class SelfTestApp(tk.Tk):
             bg="#cccccc", fg="black", pady=10,
         )
         self.status_label.pack(fill="x", padx=10, pady=10)
+
+    def _build_debug_console(self, debug_frame):
+        """
+        Free-text command box + output log, right in the GUI - for commands
+        that don't have a dedicated button (COIL_STATUS, BUTTON_STATUS,
+        PING, or any future ones), so testing doesn't require switching to
+        a separate terminal/screen session. Replies ride the same "raw"
+        event path _handle_event already had (previously only printed to
+        the console, not shown anywhere in the window - that's the gap
+        this fills).
+        """
+        send_row = ttk.Frame(debug_frame)
+        send_row.pack(fill="x")
+
+        self.debug_cmd_var = tk.StringVar()
+        self.debug_entry = ttk.Entry(send_row, textvariable=self.debug_cmd_var, state="disabled")
+        self.debug_entry.pack(side="left", fill="x", expand=True)
+        self.debug_entry.bind("<Return>", lambda _evt: self._on_send_debug_command())
+
+        self.debug_send_btn = ttk.Button(
+            send_row, text="Send", command=self._on_send_debug_command, state="disabled"
+        )
+        self.debug_send_btn.pack(side="left", padx=(6, 0))
+
+        self.debug_log = tk.Text(debug_frame, height=6, state="disabled", wrap="word")
+        self.debug_log.pack(fill="x", pady=(6, 0))
+
+    def _on_send_debug_command(self):
+        command = self.debug_cmd_var.get().strip()
+        if not command or not self.client.is_connected():
+            return
+        self._append_debug_log(f"> {command}")
+        self.debug_cmd_var.set("")
+        try:
+            self.client.send(command)
+        except Exception as exc:  # e.g. board unplugged mid-type
+            self._append_debug_log(f"[send failed] {exc}")
+
+    def _append_debug_log(self, text):
+        self.debug_log.config(state="normal")
+        self.debug_log.insert("end", text + "\n")
+        self.debug_log.see("end")
+        self.debug_log.config(state="disabled")
 
     def _make_result_tree(self, parent, columns, column_specs):
         """
@@ -175,6 +223,24 @@ class SelfTestApp(tk.Tk):
             check_lbl.config(text="☑")  # checked box
             status_lbl.config(text="PASS")
 
+    def _build_relay_row(self, param_frame):
+        """
+        Live toggle for the DC bus contactor relay (Cont_Enable/GPIO14),
+        independent of running a full self-test - lets you watch VBus_AD/
+        DC_BUS respond to open vs closed without needing to click Start Test.
+        Note: running Start Test still force-closes this same relay via the
+        Cont_Enable test entry, so it'll snap back to closed on the next run
+        regardless of this toggle's state.
+        """
+        row = ttk.Frame(param_frame)
+        row.pack(fill="x", pady=(0, 6))
+
+        self.relay_closed_var = tk.BooleanVar(value=False)
+        self.relay_toggle_btn = ttk.Button(
+            row, text="Relay: OPEN", command=self._on_relay_toggle, state="disabled"
+        )
+        self.relay_toggle_btn.pack(side="left")
+
     def _build_fan_panel(self, fan_frame):
         self.fan_status_var = tk.StringVar(value="FAIL")
         self.fan_status_label = tk.Label(
@@ -218,6 +284,9 @@ class SelfTestApp(tk.Tk):
             self.stop_btn.config(state="disabled")
             self.fan_toggle_btn.config(state="disabled")
             self.fan_speed_scale.config(state="disabled")
+            self.relay_toggle_btn.config(state="disabled")
+            self.debug_entry.config(state="disabled")
+            self.debug_send_btn.config(state="disabled")
             self.status_var.set("Not connected")
             self._set_status_color("#cccccc")
             return
@@ -237,6 +306,9 @@ class SelfTestApp(tk.Tk):
         self.start_btn.config(state="normal")
         self.fan_toggle_btn.config(state="normal")
         self.fan_speed_scale.config(state="normal")
+        self.relay_toggle_btn.config(state="normal")
+        self.debug_entry.config(state="normal")
+        self.debug_send_btn.config(state="normal")
         self.status_var.set("Connected - waiting for board")
         self._set_status_color("#e6e6e6")
 
@@ -245,6 +317,10 @@ class SelfTestApp(tk.Tk):
         for check_lbl, status_lbl in self.button_row_widgets.values():
             check_lbl.config(text="☐")
             status_lbl.config(text="")
+
+        # Fresh board -> relay is OPEN at boot (RelayControl_Init() default).
+        self.relay_closed_var.set(False)
+        self.relay_toggle_btn.config(text="Relay: OPEN")
 
     # ---- Test run -----------------------------------------------------
 
@@ -276,6 +352,23 @@ class SelfTestApp(tk.Tk):
         self.live_mode_var.set(False)
         self.stop_btn.config(state="disabled")
 
+    # ---- Relay control -----------------------------------------------------
+
+    def _on_relay_toggle(self):
+        closing = not self.relay_closed_var.get()
+        self.relay_closed_var.set(closing)
+        self.relay_toggle_btn.config(text="Relay: CLOSED" if closing else "Relay: OPEN")
+        if self.client.is_connected():
+            self.client.set_relay(closing)
+            # Relay-only commands don't produce new TEST, lines on their own -
+            # without this, VBus_AD/DC_BUS (and everything else) would keep
+            # showing whatever they were from the last full test run instead
+            # of the real, current post-toggle state. Kick off a fresh run so
+            # the panels actually reflect what just changed - matches what a
+            # multimeter at the board would show right now, not stale data.
+            if not self.live_mode_var.get():
+                self._on_start_test()
+
     # ---- Fan control -----------------------------------------------------
 
     def _on_fan_toggle(self):
@@ -290,7 +383,7 @@ class SelfTestApp(tk.Tk):
 
     def _on_fan_speed_change(self, _value):
         percent = int(self.fan_speed_var.get())
-        self.fan_speed_label.config(text=f"{percent}%")x
+        self.fan_speed_label.config(text=f"{percent}%")
         if not (self.fan_on_var.get() and self.client.is_connected()):
             return
         # Debounce: a Scale drag fires this continuously (once per pixel).
@@ -359,6 +452,14 @@ class SelfTestApp(tk.Tk):
             self.fan_speed_label.config(text=f"{event['percent']}%")
             self._update_fan_status()
 
+        elif etype == "relay_ack":
+            # Board's actual applied state, not just what we optimistically set
+            # on click - keeps the button label truthful if something else
+            # (e.g. a Start Test run's Cont_Enable entry) changed it meanwhile.
+            closed = bool(event["state"])
+            self.relay_closed_var.set(closed)
+            self.relay_toggle_btn.config(text="Relay: CLOSED" if closed else "Relay: OPEN")
+
         elif etype == "disconnected":
             self.status_var.set("Board disconnected")
             self._set_status_color("#cccccc")
@@ -367,10 +468,15 @@ class SelfTestApp(tk.Tk):
             self.stop_btn.config(state="disabled")
             self.fan_toggle_btn.config(state="disabled")
             self.fan_speed_scale.config(state="disabled")
+            self.relay_toggle_btn.config(state="disabled")
+            self.debug_entry.config(state="disabled")
+            self.debug_send_btn.config(state="disabled")
 
         elif etype == "raw":
-            # Unrecognized line - ignored by the UI, still useful for debugging via console.
-            print(f"[raw] {event['line']}")
+            # Unrecognized line, e.g. COIL_STATUS/BUTTON_STATUS replies -
+            # shown in the Debug Console log, not just printed to the
+            # terminal (which nothing in the GUI window used to surface).
+            self._append_debug_log(event["line"])
 
     def _route_test_result(self, event):
         name = event["name"]

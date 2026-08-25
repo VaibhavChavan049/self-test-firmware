@@ -1,4 +1,5 @@
 "./adc_test.obj"
+"./buzzer_control.obj"
 "./syscfg/board.obj"
 "./syscfg/c2000ware_libraries.obj"
 "./coil_control.obj"
@@ -7,6 +8,7 @@
 "./gpio_test.obj"
 "./led_test.obj"
 "./main.obj"
+"./relay_control.obj"
 "./self_test.obj"
 "./uart_comm.obj"
 "./device/device.obj"

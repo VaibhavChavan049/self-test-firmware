@@ -9,6 +9,7 @@ GEN_CMDS__FLAG :=
 
 ORDERED_OBJS += \
 "./adc_test.obj" \
+"./buzzer_control.obj" \
 "./syscfg/board.obj" \
 "./syscfg/c2000ware_libraries.obj" \
 "./coil_control.obj" \
@@ -17,6 +18,7 @@ ORDERED_OBJS += \
 "./gpio_test.obj" \
 "./led_test.obj" \
 "./main.obj" \
+"./relay_control.obj" \
 "./self_test.obj" \
 "./uart_comm.obj" \
 "./device/device.obj" \
@@ -149,8 +151,8 @@ Driverlib\ Empty\ CPU1\ Example\ CCS\ Project.out: $(OBJS) $(CMD_SRCS) $(LIB_SRC
 # Other Targets
 clean:
 	-$(RM) $(GEN_MISC_FILES__QUOTED)$(GEN_FILES__QUOTED)$(EXE_OUTPUTS__QUOTED)
-	-$(RM) "adc_test.obj" "syscfg/board.obj" "syscfg/c2000ware_libraries.obj" "coil_control.obj" "current_protect.obj" "fan_control.obj" "gpio_test.obj" "led_test.obj" "main.obj" "self_test.obj" "uart_comm.obj" "device/device.obj" "device/f28p65x_codestartbranch.obj" 
-	-$(RM) "adc_test.d" "syscfg/board.d" "syscfg/c2000ware_libraries.d" "coil_control.d" "current_protect.d" "fan_control.d" "gpio_test.d" "led_test.d" "main.d" "self_test.d" "uart_comm.d" "device/device.d" 
+	-$(RM) "adc_test.obj" "buzzer_control.obj" "syscfg/board.obj" "syscfg/c2000ware_libraries.obj" "coil_control.obj" "current_protect.obj" "fan_control.obj" "gpio_test.obj" "led_test.obj" "main.obj" "relay_control.obj" "self_test.obj" "uart_comm.obj" "device/device.obj" "device/f28p65x_codestartbranch.obj" 
+	-$(RM) "adc_test.d" "buzzer_control.d" "syscfg/board.d" "syscfg/c2000ware_libraries.d" "coil_control.d" "current_protect.d" "fan_control.d" "gpio_test.d" "led_test.d" "main.d" "relay_control.d" "self_test.d" "uart_comm.d" "device/device.d" 
 	-$(RM) "device/f28p65x_codestartbranch.d" 
 	-$(RMDIR) $(GEN_MISC_DIRS__QUOTED)
 	-@echo ' '

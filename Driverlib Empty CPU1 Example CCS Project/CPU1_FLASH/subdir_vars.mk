@@ -14,6 +14,7 @@ LIB_SRCS += \
 
 C_SRCS += \
 ../adc_test.c \
+../buzzer_control.c \
 ./syscfg/board.c \
 ./syscfg/c2000ware_libraries.c \
 ../coil_control.c \
@@ -22,6 +23,7 @@ C_SRCS += \
 ../gpio_test.c \
 ../led_test.c \
 ../main.c \
+../relay_control.c \
 ../self_test.c \
 ../uart_comm.c 
 
@@ -36,6 +38,7 @@ GEN_MISC_DIRS += \
 
 C_DEPS += \
 ./adc_test.d \
+./buzzer_control.d \
 ./syscfg/board.d \
 ./syscfg/c2000ware_libraries.d \
 ./coil_control.d \
@@ -44,6 +47,7 @@ C_DEPS += \
 ./gpio_test.d \
 ./led_test.d \
 ./main.d \
+./relay_control.d \
 ./self_test.d \
 ./uart_comm.d 
 
@@ -53,6 +57,7 @@ GEN_OPTS += \
 
 OBJS += \
 ./adc_test.obj \
+./buzzer_control.obj \
 ./syscfg/board.obj \
 ./syscfg/c2000ware_libraries.obj \
 ./coil_control.obj \
@@ -61,6 +66,7 @@ OBJS += \
 ./gpio_test.obj \
 ./led_test.obj \
 ./main.obj \
+./relay_control.obj \
 ./self_test.obj \
 ./uart_comm.obj 
 
@@ -78,6 +84,7 @@ GEN_MISC_DIRS__QUOTED += \
 
 OBJS__QUOTED += \
 "adc_test.obj" \
+"buzzer_control.obj" \
 "syscfg/board.obj" \
 "syscfg/c2000ware_libraries.obj" \
 "coil_control.obj" \
@@ -86,6 +93,7 @@ OBJS__QUOTED += \
 "gpio_test.obj" \
 "led_test.obj" \
 "main.obj" \
+"relay_control.obj" \
 "self_test.obj" \
 "uart_comm.obj" 
 
@@ -100,6 +108,7 @@ GEN_MISC_FILES__QUOTED += \
 
 C_DEPS__QUOTED += \
 "adc_test.d" \
+"buzzer_control.d" \
 "syscfg/board.d" \
 "syscfg/c2000ware_libraries.d" \
 "coil_control.d" \
@@ -108,6 +117,7 @@ C_DEPS__QUOTED += \
 "gpio_test.d" \
 "led_test.d" \
 "main.d" \
+"relay_control.d" \
 "self_test.d" \
 "uart_comm.d" 
 
@@ -119,6 +129,7 @@ GEN_FILES__QUOTED += \
 
 C_SRCS__QUOTED += \
 "../adc_test.c" \
+"../buzzer_control.c" \
 "./syscfg/board.c" \
 "./syscfg/c2000ware_libraries.c" \
 "../coil_control.c" \
@@ -127,6 +138,7 @@ C_SRCS__QUOTED += \
 "../gpio_test.c" \
 "../led_test.c" \
 "../main.c" \
+"../relay_control.c" \
 "../self_test.c" \
 "../uart_comm.c" 
 

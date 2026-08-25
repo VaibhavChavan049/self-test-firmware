@@ -103,6 +103,29 @@ void UART_sendFanAck(uint16_t percent)
     UART_sendString(line);
 }
 
+void UART_sendRelayAck(uint16_t state)
+{
+    char line[UART_LINE_MAXLEN];
+    snprintf(line, sizeof(line), "RELAY_ACK,%u\n", state);
+    UART_sendString(line);
+}
+
+void UART_sendCoilStatus(const char *stateStr, const char *heatModeStr, uint16_t calValue, uint8_t calValid)
+{
+    char line[UART_LINE_MAXLEN];
+    snprintf(line, sizeof(line), "COIL_STATUS,%s,%s,%u,%s\n",
+             stateStr, heatModeStr, calValue, calValid ? "VALID" : "INVALID");
+    UART_sendString(line);
+}
+
+void UART_sendButtonStatus(uint32_t onCount, uint32_t lowCount, uint32_t mediumCount, uint32_t highCount)
+{
+    char line[UART_LINE_MAXLEN];
+    snprintf(line, sizeof(line), "BUTTON_STATUS,%lu,%lu,%lu,%lu\n",
+             (unsigned long)onCount, (unsigned long)lowCount, (unsigned long)mediumCount, (unsigned long)highCount);
+    UART_sendString(line);
+}
+
 uint8_t UART_readLine(char *outBuf, uint16_t maxLen)
 {
     uint16_t idx = 0;

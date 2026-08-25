@@ -17,6 +17,7 @@ keep both sides in sync).
 | `START\n` | Run the full test sequence now. |
 | `STATUS\n` | (reserved) Ask board what it's currently doing — not required for v1. |
 | `FAN_SET,<0-100>\n` | Set the fan's PWM duty cycle live (0 = off). Independent of the test sequence - can be sent any time, not just during `START`. Board replies `FAN_ACK,<percent>`. |
+| `RELAY_SET,<0\|1>\n` | Live/independent toggle of the DC bus contactor relay (Cont_Enable, GPIO14) - 1 = closed (connects DC+_P1 to DC+_P2), 0 = open. Board replies `RELAY_ACK,<0\|1>`. Note: running `START` still force-closes this same pin via the `Cont_Enable` test entry, so a full test run overrides whatever this was last set to. |
 
 ## Board → PC
 
@@ -28,6 +29,7 @@ keep both sides in sync).
 | `TEST,<name>,<type>,<result>,<value>\n` | One parameter's outcome. See fields below. |
 | `RESULT,OVERALL,<PASS\|FAIL>\n` | Final verdict, sent once after all `TEST,` lines. |
 | `FAN_ACK,<percent>\n` | Reply to `FAN_SET` - confirms the duty cycle now applied. |
+| `RELAY_ACK,<0\|1>\n` | Reply to `RELAY_SET` - confirms the relay state now applied. |
 
 ### `TEST,` field definitions
 

@@ -38,6 +38,9 @@ void UART_sendBegin(uint16_t testCount);
 void UART_sendTestResult(const char *name, const char *typeStr, uint8_t passed, int32_t value);
 void UART_sendOverallResult(uint8_t allPassed);
 void UART_sendFanAck(uint16_t percent);
+void UART_sendRelayAck(uint16_t state);
+void UART_sendCoilStatus(const char *stateStr, const char *heatModeStr, uint16_t calValue, uint8_t calValid);
+void UART_sendButtonStatus(uint32_t onCount, uint32_t lowCount, uint32_t mediumCount, uint32_t highCount);
 
 /*
  * Blocking read of one newline-terminated command line (e.g. "START", "PING")
