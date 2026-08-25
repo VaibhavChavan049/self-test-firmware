@@ -8,7 +8,7 @@ directly, the workflow is: build the project fresh in CCS, then copy the
 
 **Two folders, two purposes don't confuse them:**
 
-- [`src/`](src/) — the **real firmware**. This is what goes in the CCS
+- [`src/`](src/) the **real firmware**. This is what goes in the CCS
   project you actually build and flash.
 - [`reference/`](reference/) **scratch space** for TI-Rex examples you
   download (if the "Import to IDE" button in Resource Explorer isn't
